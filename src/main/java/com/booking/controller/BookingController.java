@@ -1,5 +1,6 @@
 package com.booking.controller;
 
+import java.security.Principal;
 import java.util.Optional;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,11 +53,24 @@ public class BookingController {
 
 	@PostMapping("/saveBookingDetails")
 	public BookingResponse saveBookingDetails(@RequestBody BookingRequest request) {
+		Principal user = new Principal() {
+			
+			@Override
+			public String getName() {
+				// TODO Auto-generated method stub
+				return "gokul";
+			}
+		};
 		return bookingService.saveBookingDetails(request);
 	}
 
 	@PutMapping("/updateBookingDetails")
 	public BookingResponse updateBookingDetailsById(@RequestBody BookingRequest request) {
 		return bookingService.updateBookingDetails(request);
+	}
+	
+	@GetMapping("/getQuestionsByEntityCode/{entityCode}")
+	public BookingResponse getQuestionsByEntityCode(@PathVariable Optional<String> entityCode) {
+		return bookingService.getQuestionsByEntityCode(entityCode);
 	}
 }

@@ -15,4 +15,6 @@ public interface BookingService {
 
 	BookingResponse updateBookingDetails(BookingRequest request);
 
+	BookingResponse getQuestionsByEntityCode(Optional<String> entityCode);
+
 }

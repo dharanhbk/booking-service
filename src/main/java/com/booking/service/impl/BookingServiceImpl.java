@@ -20,6 +20,7 @@ import com.booking.model.request.BookingRequest;
 import com.booking.model.response.BookingResponse;
 import com.booking.repository.BookingRepository;
 import com.booking.repository.CustomerEntityRepository;
+import com.booking.repository.QuestionnaireRepository;
 import com.booking.service.BookingService;
 
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,8 @@ public class BookingServiceImpl implements BookingService {
 	private final BookingRepository bookingRepository;
 	
 	private final CustomerEntityRepository customerEntityRepository;
+	
+	private final QuestionnaireRepository questionnaireRepository;
 	
 	@Override
 	public BookingResponse findByBookingId(Optional<Long> bookingId) {
@@ -78,11 +81,13 @@ public class BookingServiceImpl implements BookingService {
 	public BookingResponse saveBookingDetails(BookingRequest request) {
 		Booking booking = new Booking();
 		booking.setFkEntityCode(request.getFkEntityCode());
-		
+		booking = bookingRepository.save(booking);
+		final Long bookingId = booking.getBookingId();
 		Set<Answers> answer = request.getQuesAnswers().stream().map(ans->{
 			Answers en = new Answers();
 			en.setAnswer(ans.getAnswer());
 			en.setQuestionCode(ans.getQuestionCode());
+			en.setBookingId(bookingId);
 			return en;
 		}).collect(Collectors.toSet());
 		booking.setAnswers(answer);
@@ -105,6 +110,13 @@ public class BookingServiceImpl implements BookingService {
 		booking.setAnswers(answer);
 		booking = bookingRepository.save(booking);
 		return new BookingResponse(booking, "success", null);
+	}
+
+	@Override
+	public BookingResponse getQuestionsByEntityCode(Optional<String> entityCode) {
+		if(entityCode.isPresent())
+			return new BookingResponse(questionnaireRepository.findByFkEntityCode(entityCode.get()), "Success", null);
+		return new BookingResponse(null, "Invalid request!", null);
 	}
 	
 
