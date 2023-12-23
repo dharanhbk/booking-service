@@ -14,13 +14,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.booking.entity.BookingAnswers;
-import com.booking.entity.Booking;
+import com.booking.entity.DriverAnswers;
+import com.booking.entity.Driver;
 import com.booking.entity.CustomerEntity;
 import com.booking.entity.Questionnaire;
 import com.booking.model.request.QueAnsRequest;
 import com.booking.model.response.QueAnsResponse;
-import com.booking.repository.BookingRepository;
+import com.booking.repository.DriverRepository;
 import com.booking.repository.CustomerEntityRepository;
 import com.booking.service.QueAnsService;
 
@@ -28,17 +28,17 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Qualifier("booking")
-public class BookingServiceImpl implements QueAnsService {
+@Qualifier("driver")
+public class DriverServiceImpl implements QueAnsService {
 	
-	private final BookingRepository bookingRepository;
+	private final DriverRepository driverRepository;
 	
 	private final CustomerEntityRepository customerEntityRepository;
 	
 	@Override
-	public QueAnsResponse findById(Optional<Long> bookingId) {
-		if(bookingId.isPresent()) 
-			return new QueAnsResponse(bookingRepository.findById(bookingId.get()),"success",null);
+	public QueAnsResponse findById(Optional<Long> driverId) {
+		if(driverId.isPresent()) 
+			return new QueAnsResponse(driverRepository.findById(driverId.get()),"success",null);
 		return new QueAnsResponse(null, "Invalid Request",null);
 	}
 	
@@ -46,32 +46,32 @@ public class BookingServiceImpl implements QueAnsService {
 	public QueAnsResponse findAllByEntityCode(Optional<String> entityCode, Integer pageNo, Integer fetchSize) {
 		if(entityCode.isPresent()) {
 			Optional<CustomerEntity> customerEntity = customerEntityRepository.findById(entityCode.get());
-			Pageable page = PageRequest.of(pageNo, fetchSize, Sort.by("bookingId").descending());
-			Page<Booking> paginatedResult = bookingRepository.findByFkEntityCode(entityCode.get(),page);
+			Pageable page = PageRequest.of(pageNo, fetchSize, Sort.by("driverId").descending());
+			Page<Driver> paginatedResult = driverRepository.findByFkEntityCode(entityCode.get(),page);
 			if(paginatedResult.hasContent() && customerEntity.isPresent()) {
-				List<Booking> bookings = paginatedResult.toList();
+				List<Driver> drivers = paginatedResult.toList();
 				List<Questionnaire> questions = customerEntity.get().getQuestions().stream().filter(en -> 
-				(Objects.nonNull(en.getQuestionCategory()) && en.getQuestionCategory().equalsIgnoreCase("BOOKING"))).toList();
-				String[][] bookingGrid = new String[bookings.size()+1][questions.size()+1];
+				(Objects.nonNull(en.getQuestionCategory()) && en.getQuestionCategory().equalsIgnoreCase("DRIVER"))).toList();
+				String[][] driverGrid = new String[drivers.size()+1][questions.size()+1];
 				List<Questionnaire> questionsSorted = questions.stream()
 						.sorted((o1,o2)->o1.getColumnOrderId().compareTo(o2.getColumnOrderId())).toList();
 				List<String> header = new ArrayList<>();
-				header.add("Booking Id");
-				bookingGrid[0][0] = "Booking Id";
+				header.add("Driver Id");
+				driverGrid[0][0] = "Driver Id";
 				for(int i=0;i<questionsSorted.size();i++) {
 					header.add(questionsSorted.get(i).getQuestionCode());
-					bookingGrid[0][i+1] = questionsSorted.get(i).getQuestionText();
+					driverGrid[0][i+1] = questionsSorted.get(i).getQuestionText();
 				}
 				int row =1;
-				for(Booking booking:bookings) {
-					bookingGrid[row][0] = booking.getBookingId().toString();
-					for(BookingAnswers ans:booking.getAnswers()) {
+				for(Driver driver:drivers) {
+					driverGrid[row][0] = driver.getDriverId().toString();
+					for(DriverAnswers ans:driver.getAnswers()) {
 						int col = header.indexOf(ans.getQuestionCode());
-						bookingGrid[row][col] = ans.getAnswer();
+						driverGrid[row][col] = ans.getAnswer();
 					}
 					row++;
 				}
-				return new QueAnsResponse(bookingGrid, "success",paginatedResult.getNumberOfElements());
+				return new QueAnsResponse(driverGrid, "success",paginatedResult.getNumberOfElements());
 			}
 		}
 		return new QueAnsResponse(null, "Invalid Request",null);
@@ -80,37 +80,37 @@ public class BookingServiceImpl implements QueAnsService {
 
 	@Override
 	public QueAnsResponse save(QueAnsRequest request) {
-		Booking booking = new Booking();
-		booking.setFkEntityCode(request.getFkEntityCode());
-		booking = bookingRepository.save(booking);
-		final Long bookingId = booking.getBookingId();
-		Set<BookingAnswers> answer = request.getQuesAnswers().stream().map(ans->{
-			BookingAnswers en = new BookingAnswers();
+		Driver driver = new Driver();
+		driver.setFkEntityCode(request.getFkEntityCode());
+		driver = driverRepository.save(driver);
+		final Long driverId = driver.getDriverId();
+		Set<DriverAnswers> answer = request.getQuesAnswers().stream().map(ans->{
+			DriverAnswers en = new DriverAnswers();
 			en.setAnswer(ans.getAnswer());
 			en.setQuestionCode(ans.getQuestionCode());
-			en.setBookingId(bookingId);
+			en.setDriverId(driverId);
 			return en;
 		}).collect(Collectors.toSet());
-		booking.setAnswers(answer);
-		booking = bookingRepository.save(booking);
-		return new QueAnsResponse(booking, "success", null);
+		driver.setAnswers(answer);
+		driver = driverRepository.save(driver);
+		return new QueAnsResponse(driver, "success", null);
 	}
 
 	@Override
 	public QueAnsResponse update(QueAnsRequest request) {
-		Booking booking = new Booking();
-		booking.setFkEntityCode(request.getFkEntityCode());
-		booking.setBookingId(request.getId());
-		Set<BookingAnswers> answer = request.getQuesAnswers().stream().map(ans->{
-			BookingAnswers en = new BookingAnswers();
+		Driver driver = new Driver();
+		driver.setFkEntityCode(request.getFkEntityCode());
+		driver.setDriverId(request.getId());
+		Set<DriverAnswers> answer = request.getQuesAnswers().stream().map(ans->{
+			DriverAnswers en = new DriverAnswers();
 			en.setAnswer(ans.getAnswer());
 			en.setQuestionCode(ans.getQuestionCode());
 			en.setAnswerId(ans.getAnswerId());
 			return en;
 		}).collect(Collectors.toSet());
-		booking.setAnswers(answer);
-		booking = bookingRepository.save(booking);
-		return new QueAnsResponse(booking, "success", null);
+		driver.setAnswers(answer);
+		driver = driverRepository.save(driver);
+		return new QueAnsResponse(driver, "success", null);
 	}
 
 
