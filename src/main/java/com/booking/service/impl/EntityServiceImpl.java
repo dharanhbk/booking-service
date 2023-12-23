@@ -1,4 +1,4 @@
-package com.booking.service;
+package com.booking.service.impl;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 import com.booking.entity.CustomerEntity;
 import com.booking.model.mapper.EntityMapper;
 import com.booking.model.request.EntityRequest;
-import com.booking.model.response.BaseResponse;
 import com.booking.model.response.EntityResponse;
+import com.booking.model.response.QueAnsResponse;
 import com.booking.repository.CustomerEntityRepository;
+import com.booking.repository.QuestionnaireRepository;
+import com.booking.service.EntityService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +23,8 @@ import lombok.RequiredArgsConstructor;
 public class EntityServiceImpl implements EntityService {
 	
 	private final CustomerEntityRepository customerEntityRepository;
+	
+	private final QuestionnaireRepository questionnaireRepository;
 	
 	private EntityMapper entityMapper = EntityMapper.MAPPER;
 	
@@ -45,7 +49,16 @@ public class EntityServiceImpl implements EntityService {
 		return null;
 	}
 	
-	
+	@Override
+	public QueAnsResponse getQuestionsByEntityCode(Optional<String> entityCode, Optional<String> quesCategory) {
+		if(entityCode.isPresent() && quesCategory.isPresent())			
+				return new QueAnsResponse(questionnaireRepository.findByFkEntityCodeAndQuestionCategory(
+					entityCode.get(),quesCategory.get()), "Success", null);
+		else if(entityCode.isPresent())			
+			return new QueAnsResponse(questionnaireRepository.findByFkEntityCode(
+				entityCode.get()), "Success", null);
+		return new QueAnsResponse(null, "Invalid request!", null);
+	}
 	
 	
 

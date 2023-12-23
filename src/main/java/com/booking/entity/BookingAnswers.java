@@ -10,8 +10,8 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="answers",schema="booking")
-public class Answers{
+@Table(name="booking_answers",schema="booking")
+public class BookingAnswers{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="answer_id",nullable=false)

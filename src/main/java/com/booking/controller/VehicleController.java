@@ -1,6 +1,5 @@
 package com.booking.controller;
 
-import java.security.Principal;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,44 +23,44 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/v1.0")
-//@RequiredArgsConstructor
-@Tag(name = "Booking", description = "Booking service APIs")
-public class BookingController {
+@Tag(name = "Vehicle", description = "Vehicle service APIs")
+public class VehicleController {
 
 	@Autowired
-	@Qualifier("booking")
-	private QueAnsService bookingService;
+	@Qualifier("vehicle")
+	private QueAnsService vehicleService;
 
 	@Operation(summary = "Retrieve a Tutorial by Id", 
 			description = "Get a Tutorial object by specifying its id. The response is Tutorial object with id, title, description and published status.", 
-			tags = {"Booking"})
+			tags = {"Vehicle"})
 	@ApiResponses({ @ApiResponse(responseCode = "200", content = {
 			@Content(schema = @Schema(implementation = QueAnsResponse.class), mediaType = "application/json") }),
 			@ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
 			@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
-	@GetMapping("/getBookingDetailsById/{bookingId}")
-	public QueAnsResponse getBookingDetlbyId(@PathVariable Optional<Long> bookingId) {
-		return bookingService.findById(bookingId);
+	@GetMapping("/getVehicleDetailsById/{vehicleId}")
+	public QueAnsResponse getVehicleDetlbyId(@PathVariable Optional<Long> vehicleId) {
+		return vehicleService.findById(vehicleId);
 	}
 
-	@GetMapping("/getBookingDetailsByEntityCode/{entityCode}")
-	public QueAnsResponse getBookingDetlsbyEntityCode(@PathVariable Optional<String> entityCode,
+	@GetMapping("/getVehicleDetailsByEntityCode/{entityCode}")
+	public QueAnsResponse getVehicleDetlsbyEntityCode(@PathVariable Optional<String> entityCode,
 			@RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
 			@RequestParam(name = "fetchSize", defaultValue = "10") Integer fetchSize) {
-		return bookingService.findAllByEntityCode(entityCode, pageNo, fetchSize);
+		return vehicleService.findAllByEntityCode(entityCode, pageNo, fetchSize);
 	}
 
-	@PostMapping("/saveBookingDetails")
-	public QueAnsResponse saveBookingDetails(@RequestBody QueAnsRequest request) {
-		return bookingService.save(request);
+	@PostMapping("/saveVehicleDetails")
+	public QueAnsResponse saveVehicleDetails(@RequestBody QueAnsRequest request) {
+		return vehicleService.save(request);
 	}
 
-	@PutMapping("/updateBookingDetails")
-	public QueAnsResponse updateBookingDetailsById(@RequestBody QueAnsRequest request) {
-		return bookingService.update(request);
+	@PutMapping("/updateVehicleDetails")
+	public QueAnsResponse updateVehicleDetailsById(@RequestBody QueAnsRequest request) {
+		return vehicleService.update(request);
 	}
+	
+	
 }

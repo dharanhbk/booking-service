@@ -1,9 +1,7 @@
 package com.booking.model.mapper;
 
-import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import org.springframework.context.annotation.Configuration;
 
 import com.booking.entity.CustomerEntity;
 import com.booking.entity.Questionnaire;

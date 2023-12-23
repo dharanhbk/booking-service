@@ -19,30 +19,22 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Entity
-@Table(name = "booking", schema = "booking")
-public class Booking extends AuditEntity<String>{
+@Table(name = "driver", schema = "booking")
+public class Driver extends AuditEntity<String>{
 	
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name = "booking_id")
-	private Long bookingId;
-	@Column(name = "requested_by")
-	private String requestedBy;
-	@Column(name = "requestor_type")
-	private String requestorType;
-	@Column(name = "approved_by")
-	private String approvedBy;
-	@Column(name = "approved_at")
-	private Date approvedAt;
+	@Column(name = "driver_id")
+	private Long driverId;
 	@Column(name = "fk_entity_code", nullable = false)
 	private String fkEntityCode;
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "fk_status_code")
 	private Status fkStatus;
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "fk_booking_id",referencedColumnName = "booking_id" )
-	private Set<BookingAnswers> answers;
+	@JoinColumn(name = "fk_driver_id",referencedColumnName = "driver_id" )
+	private Set<DriverAnswers> answers;
 	
 	
 		

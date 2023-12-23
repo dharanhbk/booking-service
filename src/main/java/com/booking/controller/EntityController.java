@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.booking.model.request.EntityRequest;
 import com.booking.model.response.EntityResponse;
+import com.booking.model.response.QueAnsResponse;
 import com.booking.service.EntityService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,6 +36,12 @@ public class EntityController {
 	@GetMapping("/getEntityDetails/{entityCode}")
 	public ResponseEntity<EntityResponse> getEntityDetails(@PathVariable("entityCode") Optional<String> entityCode){
 		return new ResponseEntity<>(entityService.getEntityDetails(entityCode), HttpStatus.OK);
+	}
+	
+	@GetMapping("/getQuestionsByEntityCode/{entityCode}")
+	public QueAnsResponse getQuestionsByEntityCode(@PathVariable Optional<String> entityCode,
+			@RequestParam(name = "questionCategory",required = false) Optional<String> questionCategory) {
+		return entityService.getQuestionsByEntityCode(entityCode, questionCategory);
 	}
 
 }

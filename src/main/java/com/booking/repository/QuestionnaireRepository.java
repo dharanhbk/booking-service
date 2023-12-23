@@ -10,6 +10,8 @@ import com.booking.entity.Questionnaire;
 @Repository
 public interface QuestionnaireRepository extends JpaRepository<Questionnaire, Long>{
 
-	List<Questionnaire> findByFkEntityCode(String string);
+	List<Questionnaire> findByFkEntityCode(String entityCode);
+
+	List<Questionnaire> findByFkEntityCodeAndQuestionCategory(String entityCode, String questionCategory);
 
 }

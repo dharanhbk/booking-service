@@ -1,6 +1,5 @@
 package com.booking.controller;
 
-import java.security.Principal;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,44 +23,44 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/v1.0")
 //@RequiredArgsConstructor
-@Tag(name = "Booking", description = "Booking service APIs")
-public class BookingController {
+@Tag(name = "Driver", description = "Driver service APIs")
+public class DriverController {
 
 	@Autowired
-	@Qualifier("booking")
-	private QueAnsService bookingService;
+	@Qualifier("driver")
+	private QueAnsService driverService;
 
 	@Operation(summary = "Retrieve a Tutorial by Id", 
 			description = "Get a Tutorial object by specifying its id. The response is Tutorial object with id, title, description and published status.", 
-			tags = {"Booking"})
+			tags = {"Driver"})
 	@ApiResponses({ @ApiResponse(responseCode = "200", content = {
 			@Content(schema = @Schema(implementation = QueAnsResponse.class), mediaType = "application/json") }),
 			@ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
 			@ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
-	@GetMapping("/getBookingDetailsById/{bookingId}")
-	public QueAnsResponse getBookingDetlbyId(@PathVariable Optional<Long> bookingId) {
-		return bookingService.findById(bookingId);
+	@GetMapping("/getDriverDetailsById/{driverId}")
+	public QueAnsResponse getDriverDetlbyId(@PathVariable Optional<Long> driverId) {
+		return driverService.findById(driverId);
 	}
 
-	@GetMapping("/getBookingDetailsByEntityCode/{entityCode}")
-	public QueAnsResponse getBookingDetlsbyEntityCode(@PathVariable Optional<String> entityCode,
+	@GetMapping("/getDriverDetailsByEntityCode/{entityCode}")
+	public QueAnsResponse getDriverDetlsbyEntityCode(@PathVariable Optional<String> entityCode,
 			@RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
 			@RequestParam(name = "fetchSize", defaultValue = "10") Integer fetchSize) {
-		return bookingService.findAllByEntityCode(entityCode, pageNo, fetchSize);
+		return driverService.findAllByEntityCode(entityCode, pageNo, fetchSize);
 	}
 
-	@PostMapping("/saveBookingDetails")
-	public QueAnsResponse saveBookingDetails(@RequestBody QueAnsRequest request) {
-		return bookingService.save(request);
+	@PostMapping("/saveDriverDetails")
+	public QueAnsResponse saveDriverDetails(@RequestBody QueAnsRequest request) {
+		return driverService.save(request);
 	}
 
-	@PutMapping("/updateBookingDetails")
-	public QueAnsResponse updateBookingDetailsById(@RequestBody QueAnsRequest request) {
-		return bookingService.update(request);
+	@PutMapping("/updateDriverDetails")
+	public QueAnsResponse updateDriverDetailsById(@RequestBody QueAnsRequest request) {
+		return driverService.update(request);
 	}
+	
 }
