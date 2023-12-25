@@ -35,6 +35,8 @@ public class BookingServiceImpl implements QueAnsService {
 	
 	private final CustomerEntityRepository customerEntityRepository;
 	
+	public static final String CATEGORY = "BOOKING";
+	
 	@Override
 	public QueAnsResponse findById(Optional<Long> bookingId) {
 		if(bookingId.isPresent()) 
@@ -51,7 +53,7 @@ public class BookingServiceImpl implements QueAnsService {
 			if(paginatedResult.hasContent() && customerEntity.isPresent()) {
 				List<Booking> bookings = paginatedResult.toList();
 				List<Questionnaire> questions = customerEntity.get().getQuestions().stream().filter(en -> 
-				(Objects.nonNull(en.getQuestionCategory()) && en.getQuestionCategory().equalsIgnoreCase("BOOKING"))).toList();
+				(Objects.nonNull(en.getQuestionCategory()) && en.getQuestionCategory().equalsIgnoreCase(CATEGORY))).toList();
 				String[][] bookingGrid = new String[bookings.size()+1][questions.size()+1];
 				List<Questionnaire> questionsSorted = questions.stream()
 						.sorted((o1,o2)->o1.getColumnOrderId().compareTo(o2.getColumnOrderId())).toList();
@@ -67,7 +69,8 @@ public class BookingServiceImpl implements QueAnsService {
 					bookingGrid[row][0] = booking.getBookingId().toString();
 					for(BookingAnswers ans:booking.getAnswers()) {
 						int col = header.indexOf(ans.getQuestionCode());
-						bookingGrid[row][col] = ans.getAnswer();
+						if(col>=0)
+							bookingGrid[row][col] = ans.getAnswer();
 					}
 					row++;
 				}

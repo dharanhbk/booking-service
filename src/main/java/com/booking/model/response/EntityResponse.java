@@ -1,17 +1,10 @@
 package com.booking.model.response;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import com.booking.model.QuestionnaireDto;
-
-import lombok.Data;
-
-@Data
-public class EntityResponse {
-	
-	private String entityCode;
-	private String entityName;
-	private String entityType;
-	private List<QuestionnaireDto> questions;
-
-}
+public record EntityResponse (
+	Object data,
+	String message,
+	@JsonInclude(value = Include.NON_NULL) Integer totalCount
+	){}

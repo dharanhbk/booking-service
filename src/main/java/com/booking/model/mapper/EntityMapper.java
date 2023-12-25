@@ -7,7 +7,7 @@ import com.booking.entity.CustomerEntity;
 import com.booking.entity.Questionnaire;
 import com.booking.model.QuestionnaireDto;
 import com.booking.model.request.EntityRequest;
-import com.booking.model.response.EntityResponse;
+import com.booking.model.EntityDto;
 
 //@Configuration
 @Mapper
@@ -21,7 +21,7 @@ public interface EntityMapper {
 	
 	QuestionnaireDto mapToQuestionnaireDto(Questionnaire q);
 
-	EntityResponse mapToEntityResponse(CustomerEntity ce);
+	EntityDto mapToEntityResponse(CustomerEntity ce);
 	
 	
 

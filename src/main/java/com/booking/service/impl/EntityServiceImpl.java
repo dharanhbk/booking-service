@@ -1,12 +1,16 @@
 package com.booking.service.impl;
 
+import java.security.Principal;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.booking.entity.CustomerEntity;
+import com.booking.model.EntityDto;
 import com.booking.model.mapper.EntityMapper;
 import com.booking.model.request.EntityRequest;
 import com.booking.model.response.EntityResponse;
@@ -29,7 +33,7 @@ public class EntityServiceImpl implements EntityService {
 	private EntityMapper entityMapper = EntityMapper.MAPPER;
 	
 	@Override
-	public EntityResponse saveEntityDetails(EntityRequest entityRequest) {
+	public EntityDto saveEntityDetails(EntityRequest entityRequest) {
 		String entityCode =entityRequest.getEntityCode();
 		if(Objects.isNull(entityCode)) 
 			entityCode = UUID.randomUUID().toString();
@@ -40,7 +44,7 @@ public class EntityServiceImpl implements EntityService {
 	}
 
 	@Override
-	public EntityResponse getEntityDetails(Optional<String> entityCode) {
+	public EntityDto getEntityDetails(Optional<String> entityCode) {
 		if(entityCode.isPresent()) {
 			Optional<CustomerEntity> cusEntity = customerEntityRepository.findById(entityCode.get());
 			if(cusEntity.isPresent())
@@ -58,6 +62,21 @@ public class EntityServiceImpl implements EntityService {
 			return new QueAnsResponse(questionnaireRepository.findByFkEntityCode(
 				entityCode.get()), "Success", null);
 		return new QueAnsResponse(null, "Invalid request!", null);
+	}
+
+	@Override
+	public EntityResponse getAllEntityCards(Principal principal) {
+		if(principal!=null) {
+			List<CustomerEntity> entityLst = customerEntityRepository.findByEntityOwnerId(principal.getName());
+			if(!CollectionUtils.isEmpty(entityLst)) {
+				List<EntityDto> entityDto = entityLst.stream().map(en -> {
+					en.setQuestions(null);
+					return entityMapper.mapToEntityResponse(en);
+					}).toList();
+				return new EntityResponse(entityDto, "Success", null);
+			}
+		}
+		return new EntityResponse(null, "Invalid request!", null);
 	}
 	
 	

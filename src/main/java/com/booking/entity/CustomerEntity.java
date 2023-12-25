@@ -25,7 +25,10 @@ public class CustomerEntity extends AuditEntity<String>{
 	private String entityCode;
 	@Column(name = "entity_name")
 	private String entityName;
-	
+	@Column(name = "entity_owner_id")
+	private String entityOwnerId;
+	@Column(name = "card_icon")
+	private String cardIcon;
 //	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //	@JoinColumn(name = "fk_entity_code",referencedColumnName = "entity_code" )
 //	private Set<Booking> bookings;
