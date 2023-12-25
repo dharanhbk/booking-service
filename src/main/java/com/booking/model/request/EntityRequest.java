@@ -13,5 +13,7 @@ public class EntityRequest {
 	private String entityName;
 	private String entityType;
 	private List<QuestionnaireDto> questions;
+	private String entityDescription;
+	private String entityOwnerId;
 
 }

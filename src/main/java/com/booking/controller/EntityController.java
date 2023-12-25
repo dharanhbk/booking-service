@@ -31,8 +31,12 @@ public class EntityController {
 	public final EntityService entityService;
 	
 	@PostMapping("/saveEntityDetails")
-	public ResponseEntity<EntityDto> saveEntityDetails(@RequestBody EntityRequest request){
-		return new ResponseEntity<>(entityService.saveEntityDetails(request), HttpStatus.CREATED);
+	public ResponseEntity<EntityDto> saveEntityDetails(@RequestBody EntityRequest request, Principal principal){
+		if(principal != null) {
+			request.setEntityOwnerId(principal.getName());
+			return new ResponseEntity<>(entityService.saveEntityDetails(request), HttpStatus.CREATED);
+		}
+		return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 	}
 	
 	@GetMapping("/getEntityDetails/{entityCode}")

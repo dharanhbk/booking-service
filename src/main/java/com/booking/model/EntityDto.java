@@ -19,5 +19,6 @@ public class EntityDto {
 	private String cardIcon;
 	@JsonInclude(value = Include.NON_EMPTY)
 	private List<QuestionnaireDto> questions;
+	private String entityDescription;
 
 }
