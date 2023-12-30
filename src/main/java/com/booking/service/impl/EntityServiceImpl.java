@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.booking.entity.CustomerEntity;
+import com.booking.entity.Questionnaire;
 import com.booking.model.EntityDto;
+import com.booking.model.QuestionnaireDto;
 import com.booking.model.mapper.EntityMapper;
 import com.booking.model.request.EntityRequest;
 import com.booking.model.response.EntityResponse;
@@ -41,6 +43,12 @@ public class EntityServiceImpl implements EntityService {
 		entityRequest.getQuestions().forEach(q -> q.setFkEntityCode(entityRequest.getEntityCode()));
 		CustomerEntity entity = entityMapper.mapToCustomerEntity(entityRequest);
 		return entityMapper.mapToEntityResponse(customerEntityRepository.save(entity));
+	}
+	
+	@Override
+	public QuestionnaireDto saveEntityQuestion(QuestionnaireDto dto) {
+		Questionnaire entity = entityMapper.mapToQuestionnaire(dto);
+		return entityMapper.mapToQuestionnaireDto(questionnaireRepository.save(entity));
 	}
 
 	@Override

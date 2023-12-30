@@ -12,7 +12,10 @@ public class CORsServiceConfiguration {
 	
 	protected static final String[] METHODS = {"GET","PUT","POST","DELETE","OPTIONS"};
 	
-	protected static final String[] ALLOWED_ORIGINS = {"http://localhost:8080","http://localhost:4200"};
+	protected static final String[] ALLOWED_ORIGINS = {"http://localhost:8080","http://localhost:4200",
+			"https://ecc9-103-98-209-72.ngrok-free.app",
+			"https://d658-103-98-209-72.ngrok-free.app",
+			"tcp://0.tcp.in.ngrok.io:12610"};
 	
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
@@ -21,7 +24,7 @@ public class CORsServiceConfiguration {
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
 					.allowedMethods(METHODS)
-					.allowedOrigins(ALLOWED_ORIGINS);
+					.allowedOrigins("*");
 			}
 		};
 	}

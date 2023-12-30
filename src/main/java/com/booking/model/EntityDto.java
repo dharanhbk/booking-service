@@ -16,6 +16,7 @@ public class EntityDto {
 	private String entityType;
 //	@JsonInclude(value = Include.NON_NULL)
 	private String entityOwnerId;
+	private String entityDescription;
 	private String cardIcon;
 	@JsonInclude(value = Include.NON_EMPTY)
 	private List<QuestionnaireDto> questions;

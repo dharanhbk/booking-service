@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.booking.model.request.AnswerRequest;
 import com.booking.model.request.QueAnsRequest;
 import com.booking.model.response.QueAnsResponse;
 import com.booking.service.QueAnsService;
@@ -59,6 +60,7 @@ public class BookingController {
 	public QueAnsResponse saveBookingDetails(@RequestBody QueAnsRequest request) {
 		return bookingService.save(request);
 	}
+	
 
 	@PutMapping("/updateBookingDetails")
 	public QueAnsResponse updateBookingDetailsById(@RequestBody QueAnsRequest request) {

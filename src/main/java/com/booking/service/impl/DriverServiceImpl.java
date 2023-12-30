@@ -13,8 +13,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.booking.entity.DriverAnswers;
+import com.booking.entity.Parent;
 import com.booking.entity.Driver;
 import com.booking.entity.CustomerEntity;
 import com.booking.entity.Questionnaire;
@@ -35,6 +37,8 @@ public class DriverServiceImpl implements QueAnsService {
 	
 	private final CustomerEntityRepository customerEntityRepository;
 	
+	private static final String CATEGORY = "DRIVER";
+	
 	@Override
 	public QueAnsResponse findById(Optional<Long> driverId) {
 		if(driverId.isPresent()) 
@@ -49,29 +53,8 @@ public class DriverServiceImpl implements QueAnsService {
 			Pageable page = PageRequest.of(pageNo, fetchSize, Sort.by("driverId").descending());
 			Page<Driver> paginatedResult = driverRepository.findByFkEntityCode(entityCode.get(),page);
 			if(paginatedResult.hasContent() && customerEntity.isPresent()) {
-				List<Driver> drivers = paginatedResult.toList();
-				List<Questionnaire> questions = customerEntity.get().getQuestions().stream().filter(en -> 
-				(Objects.nonNull(en.getQuestionCategory()) && en.getQuestionCategory().equalsIgnoreCase("DRIVER"))).toList();
-				String[][] driverGrid = new String[drivers.size()+1][questions.size()+1];
-				List<Questionnaire> questionsSorted = questions.stream()
-						.sorted((o1,o2)->o1.getColumnOrderId().compareTo(o2.getColumnOrderId())).toList();
-				List<String> header = new ArrayList<>();
-				header.add("Driver Id");
-				driverGrid[0][0] = "Driver Id";
-				for(int i=0;i<questionsSorted.size();i++) {
-					header.add(questionsSorted.get(i).getQuestionCode());
-					driverGrid[0][i+1] = questionsSorted.get(i).getQuestionText();
-				}
-				int row =1;
-				for(Driver driver:drivers) {
-					driverGrid[row][0] = driver.getDriverId().toString();
-					for(DriverAnswers ans:driver.getAnswers()) {
-						int col = header.indexOf(ans.getQuestionCode());
-						driverGrid[row][col] = ans.getAnswer();
-					}
-					row++;
-				}
-				return new QueAnsResponse(driverGrid, "success",paginatedResult.getNumberOfElements());
+				return QueAnsService.super.mapParentToGrid(customerEntity.get().getQuestions(), 
+						paginatedResult.toList().stream().map(b -> (Parent) b).toList(), CATEGORY, paginatedResult.getTotalElements());
 			}
 		}
 		return new QueAnsResponse(null, "Invalid Request",null);

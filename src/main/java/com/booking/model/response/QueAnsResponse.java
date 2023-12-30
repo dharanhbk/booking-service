@@ -6,5 +6,5 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public record QueAnsResponse (
 		Object data,
 		String message,
-		@JsonInclude(value = Include.NON_NULL) Integer totalCount
+		@JsonInclude(value = Include.NON_NULL) Long totalCount
 		){}

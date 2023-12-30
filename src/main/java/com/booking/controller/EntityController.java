@@ -1,6 +1,7 @@
 package com.booking.controller;
 
 import java.security.Principal;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.booking.model.EntityDto;
+import com.booking.model.QuestionnaireDto;
+import com.booking.model.request.AnswerRequest;
 import com.booking.model.request.EntityRequest;
 import com.booking.model.response.EntityResponse;
 import com.booking.model.response.QueAnsResponse;
@@ -30,9 +33,17 @@ public class EntityController {
 	
 	public final EntityService entityService;
 	
+	
 	@PostMapping("/saveEntityDetails")
-	public ResponseEntity<EntityDto> saveEntityDetails(@RequestBody EntityRequest request){
+	public ResponseEntity<EntityDto> saveEntityDetails(@RequestBody EntityRequest request,Principal principal){
+		if(Objects.nonNull(principal))
+			request.setEntityOwnerId(principal.getName());
 		return new ResponseEntity<>(entityService.saveEntityDetails(request), HttpStatus.CREATED);
+	}
+	
+	@PostMapping("/saveEntityQuestion")
+	public ResponseEntity<QuestionnaireDto> saveEntityQuestion(@RequestBody QuestionnaireDto request) {
+		return new ResponseEntity<>(entityService.saveEntityQuestion(request), HttpStatus.OK);
 	}
 	
 	@GetMapping("/getEntityDetails/{entityCode}")

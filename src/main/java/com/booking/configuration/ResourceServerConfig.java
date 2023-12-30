@@ -24,7 +24,7 @@ public class ResourceServerConfig {
         return http
                 .authorizeHttpRequests(auth -> auth
                 		.requestMatchers("/swagger-ui/**",
-                				"/v3/api-docs/**").permitAll()
+                				"/v3/api-docs/**","/utility/**").permitAll()
                 		.anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.decoder(JwtDecoders.fromIssuerLocation(issuerUri))))

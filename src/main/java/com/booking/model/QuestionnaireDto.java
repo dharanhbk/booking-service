@@ -18,6 +18,8 @@ public class QuestionnaireDto {
 	private Integer questionVersion;
 	private String questionCategory;
 	private boolean isActiveInd;
+	private boolean isVisible;
+	private boolean isRequiredField;
 	private Integer columnOrderId;
 
 }

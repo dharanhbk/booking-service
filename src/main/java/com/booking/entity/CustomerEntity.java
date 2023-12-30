@@ -27,6 +27,8 @@ public class CustomerEntity extends AuditEntity<String>{
 	private String entityName;
 	@Column(name = "entity_owner_id")
 	private String entityOwnerId;
+	@Column(name = "entity_description")
+	private String entityDescription;
 	@Column(name = "card_icon")
 	private String cardIcon;
 //	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

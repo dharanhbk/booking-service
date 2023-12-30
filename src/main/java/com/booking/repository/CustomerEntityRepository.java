@@ -12,4 +12,7 @@ public interface CustomerEntityRepository extends JpaRepository<CustomerEntity, 
 
 	List<CustomerEntity> findByEntityOwnerId(String name);
 
+//	List<CustomerEntity> findByQuestionCategoryAndFkEntityCodeAndQuestionCodeIn(String category, String fkEntityCode,
+//			List<String> qCode);
+
 }

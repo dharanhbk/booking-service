@@ -12,6 +12,9 @@ public class EntityRequest {
 	private String entityCode;
 	private String entityName;
 	private String entityType;
+	private String cardIcon;
+	private String entityOwnerId;
+	private String entityDescription;
 	private List<QuestionnaireDto> questions;
 
 }

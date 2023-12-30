@@ -5,6 +5,7 @@ import java.security.Principal;
 import java.util.Optional;
 
 import com.booking.model.EntityDto;
+import com.booking.model.QuestionnaireDto;
 import com.booking.model.request.EntityRequest;
 import com.booking.model.response.EntityResponse;
 import com.booking.model.response.QueAnsResponse;
@@ -18,5 +19,7 @@ public interface EntityService {
 	QueAnsResponse getQuestionsByEntityCode(Optional<String> entityCode, Optional<String> quesCategory);
 
 	EntityResponse getAllEntityCards(Principal principal);
+
+	QuestionnaireDto saveEntityQuestion(QuestionnaireDto dto);
 
 }

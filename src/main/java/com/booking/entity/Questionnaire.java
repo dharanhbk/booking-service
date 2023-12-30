@@ -45,6 +45,11 @@ public class Questionnaire extends AuditEntity<String> {
 	private String questionCategory;
 	@Column(name="is_active_ind")
 	private boolean isActiveInd;
+	@Column(name="is_visible")
+	private boolean isVisible;
+	@Column(name="is_required_field")
+	private boolean isRequiredField;
+	
 	@Column(name="column_order_id")
 	private Integer columnOrderId;
 	

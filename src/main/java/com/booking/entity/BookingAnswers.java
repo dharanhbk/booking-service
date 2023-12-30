@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name="booking_answers",schema="booking")
-public class BookingAnswers{
+public class BookingAnswers implements Answers{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="answer_id",nullable=false)

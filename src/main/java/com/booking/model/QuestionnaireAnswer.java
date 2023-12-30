@@ -17,6 +17,7 @@ public class QuestionnaireAnswer {
 	@NotNull(groups = BasicInfo.class)
 	private Integer questionVersion;
 	private String questionCategory;
+	private String questionText;
 	private Long answerId;
 	@NotBlank(groups = BasicInfo.class)
 	private String answer;
